@@ -40,11 +40,11 @@ Existem 3 formas possíveis de usar as fixtures (massa de teste externalizada) e
 
 Vamos considerar que existe um arquivo de teste criado com o nome "users-login.json" e nele existe o seguinte json:
 
-{
-    "name": "Marina",
-    "email": "marina123@gmail.com",
-    "passaword": "marina123"
-}
+{  
+    "name": "Marina",  
+    "email": "marina123@gmail.com",  
+    "passaword": "marina123"  
+}  
 
 1° Utilizando o "cy.fixture":
 
@@ -82,19 +82,20 @@ Na automação é fundamental manter a autonomia entre os testes. Isso significa
     - importar a classe Pool do pacote instalado: const {Pool} = require ('pg')
     - criar uma const para armazenar os dados de acesso ao banco de dados:
       
-      ex:
-
-      const dbConfig = {
-        host: '',
-        user: '',
-        password: '',
-        database: '',
-        port:5432
-    }
+      ex:  
+  
+      const dbConfig = {  
+        host: '',  
+        user: '',  
+        password: '',  
+        database: '',  
+        port:5432  
+    }  
 
     - cypress.config.js > setupNodeEvents > implementar as tasks para realizar as ações necessárias no banco de dados.
 
     Ex:
+
     ![img](/midia/pgPool.png)
 
     Aqui, "on" serve para ouvir uma ação. Essa ação, será gerada por uma task - uma tarefa customizada em cypress - executada através da função removeUser() que possui como ação de excluir um usuário direto no banco (possível através do acesso criado no banco de dados com o pg-pool).
@@ -106,23 +107,23 @@ Na automação é fundamental manter a autonomia entre os testes. Isso significa
     Todas as funções cypress já possuem promessa imbutida. Isso quer dizer que mesmo sem vermos ela possui uma condição de aguardar a execução da função anterior para que a seguinte seja iniciada. Step by step.
     NO entanto, como a função de ação no banco de dados não foi feita através do Cypress, é necessário incluir a promessa para garantir que nenhuma outra função que venha após ela, seja realizada em conjunto. 
 
-    ex: 
+    ex:   
 
-    return new Promise(function (resolve) {
-      ...
-      resolve({ success: ... })
-    })
+    return new Promise(function (resolve) {  
+      ...  
+      resolve({ success: ... })  
+    })  
 
     ![img](/midia/promise.png)
 
     - dentro do arquivo de teste aonde quer realizar a ação no banco de dados, chamar a função através do cy.task('')
 
-    ex:
-
-    cy.task('removeUser', user.email)
-                .then(function(result){
-                    cy.log(result)
-                })
+    ex:  
+  
+    cy.task('removeUser', user.email)  
+                .then(function(result){  
+                    cy.log(result)  
+                })  
 
 
   
