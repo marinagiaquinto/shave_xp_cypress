@@ -1,7 +1,7 @@
-//import { beforeEach } from 'mocha'
 import loginPage from '../support/pages/login'
 import shaversPage from '../support/pages/shaver'
-import login from '../support/pages/login'
+import data from '../fixtures/users-login.json'
+//ao invés de usar o cy.fixture, usou o import do javascript para obter a massa
 
 describe('login', () => {
 
@@ -9,46 +9,45 @@ describe('login', () => {
     context('quando submeto o formulário', () => {
 
         it('devo logar com sucesso', () => {
+            const user = data.success
 
-            const user = {
-                name: "Marina",
-                email: "marina123@gmail.com",
-                passaword: "marina123"
-            }
+            cy.task('removeUser', user.email)
+                .then(function(result){
+                    cy.log(result)
+                })
 
-            loginPage.submit(user.email, user.passaword)
+            cy.request({
+                method: 'POST',
+                url: 'http://localhost:3333/users',
+                body: user
+            }).then(function(response){
+                expect(response.status).to.eq(201)
+            })
+
+            loginPage.submit(user.email, user.password)
             shaversPage.header.usershouldBeLoggedIn(user.name)
-            //pág shaver pega o header importado no construtor da pág e através dele pega a função da pasta header para executar
-
+           //pág shaver pega o header importado no construtor da pág e através dele pega a função da pasta header para executar
         })
 
 
         it('não deve logar com senha incorreta', () => {
 
-            const user = {
-                name: "Marina",
-                email: "marina123@gmail.com",
-                passaword: "marina12345"
-            }
+            const user = data.invpass
 
             const message = 'Ocorreu um erro ao fazer login, verifique suas credenciais.'
 
-            loginPage.submit(user.email, user.passaword)
+            loginPage.submit(user.email, user.password)
             loginPage.noticeShouldBe(message)
         })
 
 
         it('não deve logar com email não acastrado', () => {
 
-            const user = {
-                name: "Marina",
-                email: "marina12345@gmail.com",
-                passaword: "marina123"
-            }
+            const user = data.email404
 
             const message = 'Ocorreu um erro ao fazer login, verifique suas credenciais.'
 
-            loginPage.submit(user.email, user.passaword)
+            loginPage.submit(user.email, user.password)
             loginPage.noticeShouldBe(message)
         })
 
@@ -75,15 +74,7 @@ describe('login', () => {
 
     context('senha muito curta', () => {
 
-      const passaword = [
-        '1',
-        '12',
-        '123',
-        '1234',
-        '12345'
-      ]
-
-      passaword.forEach((p) => {
+      data.shortpass.forEach((p) => {
 
         it(`não deve logar com a senha: ${p}`, () =>{
 
@@ -98,14 +89,7 @@ describe('login', () => {
 
       context('email no formato incorreto', () => {
 
-        const emails = [
-            'marina123gmail.com',
-            'marina123@gmail',
-            'marina123@',
-            '@gmail.com',
-        ]
-
-        emails.forEach((e) => {
+        data.invemails.forEach((e) => {
 
             it(`Não deve logar com email: ${e}`, () => {
                 
