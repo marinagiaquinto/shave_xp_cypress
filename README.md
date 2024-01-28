@@ -113,8 +113,16 @@ Na automação é fundamental manter a autonomia entre os testes. Isso significa
       resolve({ success: ... })
     })
 
-    
+    ![img](/midia/promise.png)
 
-    - dentro do arquivo de teste aonde quer realizar a ação no banco de dados, chamar a função através do cy.task('')" - aqui cy.task('removeUser')
+    - dentro do arquivo de teste aonde quer realizar a ação no banco de dados, chamar a função através do cy.task('')
+
+    ex:
+
+    cy.task('removeUser', user.email)
+                .then(function(result){
+                    cy.log(result)
+                })
+
 
   

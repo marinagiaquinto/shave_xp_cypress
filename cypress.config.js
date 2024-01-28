@@ -3,10 +3,10 @@ const { defineConfig } = require("cypress");
 const { Pool } = require('pg')
 
 const dbConfig = {
-  host: 'snuffleupagus.db.elephantsql.com',
-  user: 'kmbghdsd',
-  password: 'LZMVMdEQRlhG-wjPujBnHox8J7LEtJKd',
-  database: 'kmbghdsd',
+  host: '',
+  user: '',
+  password: '',
+  database: '',
   port:5432
 
 }
